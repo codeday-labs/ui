@@ -70,6 +70,6 @@
   />
   <Input name="Run ID" id="filter-by-run-id" bind:value={$runId} />
   <div class="flex justify-center items-end">
-    <Button on:click={clear} variant="primary">Clear</Button>
+    <Button on:click={clear} variant="link">Clear</Button>
   </div>
 </section>

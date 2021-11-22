@@ -54,6 +54,18 @@
     @apply bg-white text-red-400 border-red-400;
   }
 
+  .link {
+    @apply text-blue-400 py-3;
+  }
+
+  .link:disabled {
+    @apply text-blue-400 cursor-not-allowed;
+  }
+
+  .link:hover:enabled {
+    @apply text-blue-500;
+  }
+
   .selected {
     @apply text-white bg-purple-600 border-purple-200;
   }
