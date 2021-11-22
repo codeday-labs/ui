@@ -55,7 +55,7 @@
   }
 
   .link {
-    @apply text-blue-400 py-3;
+    @apply text-blue-600 py-3;
   }
 
   .link:disabled {
@@ -63,7 +63,7 @@
   }
 
   .link:hover:enabled {
-    @apply text-blue-500;
+    @apply text-blue-800;
   }
 
   .selected {
