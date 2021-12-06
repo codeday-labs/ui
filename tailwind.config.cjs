@@ -7,12 +7,13 @@ const TemporalColors = {
   primaryText: '#141414',
   spaceGray: { DEFAULT: '#141414' },
   offWhite: '#F2F2F2',
-  white: '#fff',
+  white: '#ffffff',
   // Red 700
   danger: '#b91c1c',
   // Green 200
   success: '#bbf7d0',
   // Stuff we stole from Tailwind
+  black: '#000000',
   blue: {
     50: '#eff6ff',
     100: '#dbeafe',
@@ -139,7 +140,6 @@ const TemporalColors = {
   },
 };
 
-console.log('TemporalConfig!', TemporalColors);
 const config = {
   mode: 'jit',
   purge: ['./src/**/*.{html,js,svelte,ts}'],

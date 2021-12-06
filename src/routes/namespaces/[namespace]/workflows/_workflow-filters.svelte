@@ -1,25 +1,49 @@
 <script lang="ts">
-  import { namespace } from '$lib/stores/namespace';
-  import { createWorkflowStore } from '$lib/stores/workflows';
-
-  import Select from '$lib/components/filter-select.svelte';
-  import TimeRangeSelect from '$lib/components/time-range-select.svelte';
-
+  import Select from '$lib/components/select/select.svelte';
+  import FilterSelect from '$lib/components/select/filter-select.svelte';
+  import Option from '$lib/components/select/option.svelte';
   export let timeFormat: string = 'relative';
 
-  $: store = createWorkflowStore($namespace);
-  $: range = store.range;
+  const durations = [
+    '10 minutes',
+    '60 minutes',
+    '3 hours',
+    '24 hours',
+    '3 days',
+    '7 days',
+    '30 days',
+    '90 days',
+  ];
+
+  const statuses = {
+    All: null,
+    Running: 'Running',
+    TimedOut: 'Timed Out',
+    Completed: 'Completed',
+    Failed: 'Failed',
+    'Continued as New': 'ContinuedAsNew',
+    Canceled: 'Canceled',
+    Terminated: 'Terminated',
+  };
 </script>
 
-<section class="p-4 flex gap-8">
-  <TimeRangeSelect {range} key="workflows" />
-  <Select
-    id="filter-by-relative-time"
-    name="Time Format"
-    bind:value={timeFormat}
-  >
-    <option value={'relative'}>Relative</option>
-    <option value={'UTC'}>UTC</option>
-    <option value={'current'}>Current</option>
-  </Select>
+<section class="p-4 flex flex-col">
+  <h2 class="text-3xl mb-4">Workflows</h2>
+  <div class="flex gap-4">
+    <FilterSelect label="Time Range" parameter="time-range" value="24 hours">
+      {#each durations as value}
+        <Option {value}>{value}</Option>
+      {/each}
+    </FilterSelect>
+    <FilterSelect label="Workflow Status" parameter="status" value={null}>
+      {#each Object.entries(statuses) as [label, value]}
+        <Option {value}>{label}</Option>
+      {/each}
+    </FilterSelect>
+    <Select id="filter-by-relative-time" bind:value={timeFormat}>
+      <Option value={'relative'}>Relative</Option>
+      <Option value={'UTC'}>UTC</Option>
+      <Option value={'current'}>Current</Option>
+    </Select>
+  </div>
 </section>
