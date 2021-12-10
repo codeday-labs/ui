@@ -15,16 +15,17 @@
 
 <script lang="ts">
   import { namespace } from '$lib/stores/namespace';
-
+  import DataConvertorStatus from '$lib/components/data-convertor-status.svelte';
   export let user: { name?: string; email?: string; picture?: string } = {};
 </script>
 
 <div
   id="header"
-  class="h-16 w-full px-6 flex flex-row items-center justify-between static border-b-2"
+  class="h-16 w-full px-6 flex flex-row items-center justify-between border-b-2"
 >
   <NamespaceSelect />
   <div class="flex flex-row justify-center items-center">
+    <DataConvertorStatus />
     <a href="https://github.com/temporalio/web/issues/new/choose">
       Report Bug/Give Feedback
     </a>
@@ -42,6 +43,7 @@
   a {
     @apply block px-4 py-2 text-sm;
   }
+
   a:hover {
     @apply bg-purple-100 rounded-md;
   }

@@ -29,6 +29,7 @@
   import WorkflowFilters from './_workflow-filters.svelte';
   import WorkflowsEmptyState from './_workflows-empty.svelte';
   import WorkflowsLoadingState from './_workflows-loading.svelte';
+  import VirtualList from '@sveltejs/svelte-virtual-list';
 
   export let namespace: string;
   export let initialData: ReturnType<typeof fetchAllWorkflows>;
@@ -39,25 +40,21 @@
   let timeFormat = 'relative';
 </script>
 
-<section class="flex items-start">
-  <div class="w-full h-screen overflow-scroll">
-    <header>
-      <WorkflowFilters bind:timeFormat />
-    </header>
-    {#await data}
-      <WorkflowsLoadingState />
-    {:then { workflows }}
-      {#if workflows.length}
-        <WorkflowsSummaryTable>
-          <tbody slot="rows">
-            {#each workflows as workflow}
-              <WorkflowsSummaryRow {workflow} {timeFormat} />
-            {/each}
-          </tbody>
-        </WorkflowsSummaryTable>
-      {:else}
-        <WorkflowsEmptyState />
-      {/if}
-    {/await}
-  </div>
+<section>
+  <header>
+    <WorkflowFilters bind:timeFormat />
+  </header>
+  {#await data}
+    <WorkflowsLoadingState />
+  {:then { workflows }}
+    {#if workflows.length}
+      <WorkflowsSummaryTable>
+        <VirtualList items={workflows} let:item>
+          <WorkflowsSummaryRow workflow={item} {timeFormat} />
+        </VirtualList>
+      </WorkflowsSummaryTable>
+    {:else}
+      <WorkflowsEmptyState />
+    {/if}
+  {/await}
 </section>

@@ -1,94 +1,65 @@
 <script lang="ts">
-  import { getComponentForEventType } from '$lib/utilities/get-component-for-event-type';
-  import { formatDate } from '$lib/utilities/format-date';
-  import type { HistoryEvent } from '$types';
-  import ExecutionInformation from './_execution-information.svelte';
-  import CodeBlock from '$lib/components/code-block.svelte';
+  import { getAttributesFromEvent } from '$lib/utilities/get-attributes-from-event';
+  import { getEventClassification } from '$lib/utilities/get-event-classification';
+  import { format } from '$lib/utilities/format-camel-case';
 
-  export let event: HistoryEvent;
-  export let index: number;
+  import EventSummary from '$lib/components/event-summary.svelte';
+  import EventDetails from '$lib/components/event-details.svelte';
+  import EventSummaryAttributes from '$lib/components/event-summary-attributes.svelte';
+  import EventLabel from '$lib/components/event-label.svelte';
 
-  let even = !(index % 2);
-  $: isJSONView = false;
-  $: isIdJSONView = false;
-  $: isEventTypeJSONView = false;
-  $: isTimeJSONView = false;
-  $: isDetailsJSONView = false;
+  export let event: HistoryEventWithId;
+
+  const { attributes } = event;
+
+  const hash = `#event-${event.id}`;
+  const summaryEvent = getAttributesFromEvent(event);
 </script>
 
-<tr class:even>
-  <td on:click={() => (isIdJSONView = !isIdJSONView)}>
-    {#if isIdJSONView}
-      <CodeBlock content={event.eventId} />
-    {:else}
-      {event.eventId}
-    {/if}
-  </td>
-  <td on:click={() => (isEventTypeJSONView = !isEventTypeJSONView)}>
-    {#if isEventTypeJSONView}
-      <CodeBlock content={event.eventType} />
-    {:else}
-      {event.eventType}
-    {/if}
-  </td>
-  <td on:click={() => (isTimeJSONView = !isTimeJSONView)}>
-    {#if isTimeJSONView}
-      <CodeBlock content={event.eventTime} />
-    {:else}
-      {formatDate(event.eventTime)}
-    {/if}</td
-  >
-  <td on:click={() => (isDetailsJSONView = !isDetailsJSONView)} class="w-1/2">
-    {#if isDetailsJSONView}
-      <CodeBlock
-        content={{
-          version: event.version,
-          TaskId: event.taskId,
-        }}
-      />
-    {:else}
-      <div class="flex">
-        <ExecutionInformation title="Version" value={event.version} />
-        <ExecutionInformation title="Task ID" value={event.taskId} />
-      </div>
-    {/if}
-
-    <button
-      on:click={(e) => {
-        e.stopPropagation();
-        isJSONView = !isJSONView;
-      }}>{!isJSONView ? 'GRID' : 'JSON'} VIEW</button
-    >
-
-    {#if isJSONView}
-      <CodeBlock content={event} />
-    {:else}
-      <svelte:component this={getComponentForEventType(event)} {event} />
-    {/if}
-  </td>
-</tr>
+<EventSummary {hash}>
+  <h2 class="w-1/3 {event.eventType}">
+    <EventLabel color={getEventClassification(event)}>
+      {format(String(event.eventType))}
+    </EventLabel>
+  </h2>
+  <EventSummaryAttributes attributes={summaryEvent.attributes} />
+  <EventDetails {attributes} slot="expanded" />
+</EventSummary>
 
 <style lang="postcss">
-  td {
-    vertical-align: top;
-    cursor: pointer;
-    @apply p-4 overflow-x-scroll;
+  .label {
+    @apply bg-gray-300 px-2 rounded-sm;
   }
 
-  .even {
-    @apply bg-gray-100;
+  .Scheduled {
+    @apply text-gray-700 bg-gray-300;
   }
 
-  button {
-    font-weight: bold;
-    text-align: center;
-    background: #343436;
-    color: #fff;
-    height: 25px;
-    width: 15%;
+  .Open,
+  .New {
+    @apply text-indigo-700 bg-indigo-100;
   }
 
-  button:hover {
-    @apply bg-purple-400;
+  .Started,
+  .Initiated {
+    @apply text-blue-700 bg-blue-100;
+  }
+
+  .Running,
+  .Completed,
+  .Fired {
+    @apply text-green-700 bg-green-100;
+  }
+
+  .CancelRequested,
+  .TimedOut,
+  .Signaled,
+  .Cancelled {
+    @apply text-yellow-700 bg-yellow-100;
+  }
+
+  .Failed,
+  .Terminated {
+    @apply text-red-700 bg-red-100;
   }
 </style>

@@ -5,7 +5,7 @@
   export async function load({ stuff, page }: LoadInput) {
     const { workflow, events } = stuff as {
       workflow: WorkflowExecution;
-      events: HistoryEvent[];
+      events: HistoryEventWithId[];
     };
     const { namespace } = page.params;
 
@@ -21,15 +21,12 @@
 
 <script lang="ts">
   import PendingActivities from './_pending-activities.svelte';
-  import CodeBlock from '$lib/components/code-block.svelte';
   import Event from './_event.svelte';
 
   export let workflow: WorkflowExecution;
-  export let events: HistoryEvent[];
+  export let events: HistoryEventWithId[];
 
-  let format: EventFormat = 'grid';
-
-  $: pendingActivities = workflow?.pendingActivities;
+  let pendingActivities = workflow?.pendingActivities;
 </script>
 
 <div class="execution-information px-6 py-6">
@@ -37,28 +34,9 @@
     <PendingActivities activities={pendingActivities} />
   </div>
   <section>
-    {#if format === 'grid'}
-      <table class="border-collapse w-full border-2 table-fixed">
-        <thead>
-          <tr>
-            <th class="w-1/12">ID</th>
-            <th class="w-2/12">Type</th>
-            <th class="w-2/12">Time</th>
-            <th class="w-7/12">Details</th>
-          </tr>
-        </thead>
-        <tbody>
-          {#each events as event, index}
-            <Event {event} {index} />
-          {/each}
-        </tbody>
-      </table>
-    {/if}
-
-    {#if format === 'json'}
-      {#each events as event}
-        <CodeBlock heading={`Event ID: ${event.eventId}`} content={event} />
-      {/each}
-    {/if}
+    <h3 class="text-lg mb-2 font-semibold">Event History</h3>
+    {#each events as event}
+      <Event {event} />
+    {/each}
   </section>
 </div>
