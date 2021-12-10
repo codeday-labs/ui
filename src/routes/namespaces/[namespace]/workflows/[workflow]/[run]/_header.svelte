@@ -1,7 +1,5 @@
 <script lang="ts">
   import type { WorkflowExecution } from '$lib/models/workflow-execution';
-  import { ArrowLeft } from 'svelte-hero-icons';
-  import Icon from 'svelte-hero-icons/Icon.svelte';
   import WorkflowStatus from '$lib/components/workflow-status.svelte';
   import TerminateWorkflow from '$lib/components/terminate-workflow.svelte';
   import Tabs from './_tabs.svelte';
@@ -14,12 +12,7 @@
   <main class="px-6 mb-2">
     <div class="flex m-0 mt-6 justify-between items-center">
       <h1 class="text-lg">
-        <a href={`/namespaces/${namespace}/workflows`}>
-          <Icon
-            src={ArrowLeft}
-            class={`inline w-5 h-5 text-gray-500 cursor-pointer`}
-          />
-        </a>
+        <a href={`/namespaces/${namespace}/workflows`}>&larr;</a>
         {workflow.name}
         <span class="inline">
           <WorkflowStatus status={workflow?.status} />

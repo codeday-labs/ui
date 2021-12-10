@@ -1,7 +1,5 @@
 <script lang="ts">
   import { onMount } from 'svelte';
-  import Icon from 'svelte-hero-icons/Icon.svelte';
-  import { Clipboard, Check } from 'svelte-hero-icons';
 
   export let heading = '';
   export let content: string | Parameters<typeof JSON.stringify>[0];
@@ -38,8 +36,7 @@
       <h3 class="text-lg mb-2 w-full">{heading}</h3>
     {/if}
 
-    <pre
-      class="p-4">
+    <pre class="p-4">
         <code class="language-json">
           {formatJSON(JSON.stringify(content))}
         </code>
@@ -47,15 +44,9 @@
 
     <button on:click={copy}>
       {#if copied}
-        <Icon
-          src={Check}
-          class="w-8 h-8 text-purple-900 bg-gray-300 border-2 border-gray-200 absolute right-0 top-0 hidden group-hover:block hover:bg-gray-400 hover:border-gray-400"
-        />
+        Copied
       {:else}
-        <Icon
-          src={Clipboard}
-          class="w-8 h-8 text-purple-900 bg-gray-300 border-2 border-gray-200 absolute right-0 top-0 hidden group-hover:block hover:bg-gray-400 hover:border-gray-400"
-        />
+        Copy
       {/if}
     </button>
   </div>
