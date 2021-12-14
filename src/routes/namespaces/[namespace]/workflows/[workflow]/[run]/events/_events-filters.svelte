@@ -4,7 +4,7 @@
   import type { Writable } from 'svelte/store';
 
   import { convertToJSON } from '$lib/utilities/convert-to-json';
-  import Input from '$lib/components/filter-input.svelte';
+  import Input from '$lib/components/input.svelte';
   import Button from '$lib/components/button.svelte';
   export let events: BaseEvent[];
   export let eventFormat: Writable<EventFormat>;

@@ -23,8 +23,6 @@
   }
 </script>
 
-<div class="flex flex-col items-start justify-center">
-  <Select {id} bind:value={_value}>
-    <slot />
-  </Select>
-</div>
+<Select {id} bind:value={_value}>
+  <slot />
+</Select>
