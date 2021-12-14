@@ -3,7 +3,6 @@
   import FilterSelect from '$lib/components/select/filter-select.svelte';
   import Input from '$lib/components/input.svelte';
   import Option from '$lib/components/select/option.svelte';
-  import FilterInput from '$lib/components/filter-input.svelte';
 
   export let timeFormat: string = 'relative';
 
@@ -30,11 +29,11 @@
   };
 </script>
 
-<section class="flex flex-col my-8">
+<section class="flex flex-col">
   <h2 class="text-3xl mb-4">Workflows</h2>
   <div class="grid grid-cols-5 gap-4">
-    <FilterInput id="workflow-id-filter" name="Workflow ID" value="" />
-    <FilterInput id="workflow-type-filter" name="Workflow Type" value="" />
+    <Input id="workflow-id-filter" name="Workflow ID" value="" />
+    <Input id="workflow-type-filter" name="Workflow Type" value="" />
     <FilterSelect label="Time Range" parameter="time-range" value="24 hours">
       {#each durations as value}
         <Option {value}>{value}</Option>
