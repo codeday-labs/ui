@@ -3,6 +3,8 @@ import type { WorkflowExecution } from '$lib/models/workflow-execution';
 
 import { requestFromAPI } from '$lib/utilities/request-from-api';
 
+import type { RequestFromAPIOptions } from '$lib/utilities/request-from-api';
+
 import {
   toWorkflowExecution,
   toWorkflowExecutions,
@@ -68,8 +70,10 @@ export const fetchAllArchivedWorkflows = async (
 export async function fetchWorkflow(
   parameters: GetWorkflowExecutionRequest,
   request = fetch,
+  extraOptions: RequestFromAPIOptions,
 ): Promise<WorkflowExecution> {
-  return requestFromAPI(routeForApi('workflow', parameters), { request }).then(
-    toWorkflowExecution,
-  );
+  return requestFromAPI(routeForApi('workflow', parameters), {
+    request,
+    ...extraOptions,
+  }).then(toWorkflowExecution);
 }

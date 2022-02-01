@@ -25,8 +25,12 @@
 
   export let parameters: Parameters<typeof fetchWorkflow>[0];
   export let namespace: string;
-
-  let workflow = refreshable(() => fetchWorkflow(parameters));
+  let workflow = refreshable(() =>
+    fetchWorkflow(parameters, fetch, {
+      shouldShowErrorNotification: false,
+      shouldRetry: false,
+    }),
+  );
 
   $: setContext('workflow', workflow);
 </script>

@@ -16,13 +16,14 @@ type ErrorCallback = (error: {
 }) => void;
 
 type toURLParams = Parameters<typeof toURL>;
-type RequestFromAPIOptions = {
+export type RequestFromAPIOptions = {
   params?: toURLParams[1];
   request?: typeof fetch;
   options?: Parameters<typeof fetch>[1];
   token?: string;
   onError?: ErrorCallback;
   shouldRetry?: boolean;
+  shouldShowErrorNotification?: boolean;
   retryInterval?: number;
 };
 
@@ -53,6 +54,7 @@ export const requestFromAPI = async <T>(
     request = fetch,
     token,
     shouldRetry = false,
+    shouldShowErrorNotification = true,
     onError,
     retryInterval = 5000,
   } = init;
@@ -83,7 +85,9 @@ export const requestFromAPI = async <T>(
 
     return body;
   } catch (error: unknown) {
-    handleError(error);
+    if (shouldShowErrorNotification) {
+      handleError(error);
+    }
 
     if (shouldRetry && retryCount > 0) {
       return new Promise((resolve) => {
