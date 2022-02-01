@@ -28,17 +28,18 @@ type WorkflowExecutionAPIResponse = Optional<
 export const toWorkflowExecution = (
   response: WorkflowExecutionAPIResponse,
 ): WorkflowExecution => {
-  const name = response.workflowExecutionInfo.type.name;
-  const id = response.workflowExecutionInfo.execution.workflowId;
-  const runId = response.workflowExecutionInfo.execution.runId;
-  const startTime = String(response.workflowExecutionInfo.startTime);
-  const endTime = String(response.workflowExecutionInfo.closeTime);
-  const status = response.workflowExecutionInfo.status;
-  const historyEvents = response.workflowExecutionInfo.historyLength;
+  const name = response?.workflowExecutionInfo?.type?.name ?? 'unknown';
+  const id =
+    response?.workflowExecutionInfo?.execution?.workflowId ?? 'unknown';
+  const runId = response?.workflowExecutionInfo?.execution?.runId ?? 'unknown';
+  const startTime = String(response?.workflowExecutionInfo?.startTime);
+  const endTime = String(response?.workflowExecutionInfo?.closeTime);
+  const status = response?.workflowExecutionInfo?.status;
+  const historyEvents = response?.workflowExecutionInfo?.historyLength;
   const url = `/workflows/${id}/${runId}`;
   const taskQueue = response?.executionConfig?.taskQueue?.name;
   const pendingActivities: PendingActivity[] =
-    (response.pendingActivities as unknown as PendingActivity[]) || [];
+    (response?.pendingActivities as unknown as PendingActivity[]) ?? [];
 
   return {
     name,
