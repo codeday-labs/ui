@@ -22,8 +22,8 @@
     Terminated: 'pink',
   };
 
-  $: color = colors[status];
-  $: label = humanFriendlyNames[status];
+  $: color = colors[status] ?? 'text-slate-400';
+  $: label = humanFriendlyNames[status] ?? 'unknown';
 </script>
 
 <span class={`${color} rounded-md text-center px-2 text-sm`}>
