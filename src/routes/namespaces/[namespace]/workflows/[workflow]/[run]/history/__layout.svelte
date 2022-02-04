@@ -37,7 +37,7 @@
   export let parameters: Parameters<typeof fetchEvents>[0];
 
   let events = refreshable(() => fetchEvents(parameters));
-  $: setContext('events', $events);
+  $: setContext('events', $events.data);
 </script>
 
 <section class="flex flex-col gap-4">

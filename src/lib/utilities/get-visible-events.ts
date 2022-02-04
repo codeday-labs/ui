@@ -3,7 +3,7 @@ import { eventTypeInCategory } from './get-event-categorization';
 
 export const getVisibleEvents = async (
   eventsRequest: EventualHistoryEvents,
-  workflowRequest: PromiseLike<WorkflowExecution>,
+  workflowRequest: Promise<WorkflowExecution>,
   category: EventTypeCategory,
 ): Promise<(HistoryEventWithId | PendingActivity)[]> => {
   const events = await eventsRequest;

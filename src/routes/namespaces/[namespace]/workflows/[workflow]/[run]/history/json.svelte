@@ -3,8 +3,9 @@
   import CodeBlock from '$lib/components/code-block.svelte';
 
   let events = getContext<EventualHistoryEvents>('events');
+  console.log(events);
 </script>
 
-{#await events then content}
+{#await events.data then content}
   <CodeBlock {content} />
 {/await}

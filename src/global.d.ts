@@ -1,5 +1,8 @@
 /// <reference types="@sveltejs/kit" />
 
+import type { Refreshable } from '$lib/stores/refreshable';
+// import type { getContext } from 'svelte';
+
 interface Window {
   Prism: {
     highlightAll: () => void;
@@ -13,6 +16,10 @@ interface ImportMeta {
 }
 
 type Eventual<T> = T | PromiseLike<T>;
+
+export declare function getContext(
+  key: 'workflow',
+): Refreshable<WorkflowExecution>;
 
 type WorkflowStatus =
   | 'Running'

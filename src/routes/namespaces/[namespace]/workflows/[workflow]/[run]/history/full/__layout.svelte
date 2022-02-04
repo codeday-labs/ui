@@ -12,10 +12,10 @@
 
   let category: EventTypeCategory = null;
 
-  let workflow = getContext<Refreshable<WorkflowExecution>>('workflow');
+  let workflow = getContext('workflow');
   let events = getContext<EventualHistoryEvents>('events');
 
-  $: eventsAndActivities = getVisibleEvents(events, $workflow, category);
+  $: eventsAndActivities = getVisibleEvents(events, $workflow.data, category);
 </script>
 
 {#await eventsAndActivities then events}

@@ -12,10 +12,11 @@
 
   export let namespace: string;
 
-  let workflow = getContext<Refreshable<WorkflowExecution>>('workflow');
+  let workflows = getContext<Refreshable<WorkflowExecution>>('workflow');
+  console.log(workflows);
 </script>
 
-{#await $workflow then workflow}
+{#await $workflows.data then workflow}
   <header class="flex flex-col gap-4">
     <main class="flex flex-col gap-1 relative">
       <a

@@ -3,6 +3,7 @@
   import { page } from '$app/stores';
 
   import EventDetails from '$lib/components/event-details.svelte';
+  import type { Refreshable } from '$lib/stores/refreshable';
 
   const findEvent = async (
     data: EventualHistoryEvents,
@@ -10,9 +11,9 @@
   ): Promise<HistoryEventWithId> => {
     return data.then((events) => events.find((event) => event.id === id));
   };
-
-  let events = getContext<EventualHistoryEvents>('events');
-  $: event = findEvent(events, $page.params.id);
+  let fasd = getContext('workflow');
+  let events = getContext<Refreshable<EventualHistoryEvents>>('events');
+  $: event = findEvent($events.data, $page.params.id);
 </script>
 
 {#await event then { attributes }}

@@ -1,4 +1,4 @@
-import { writable } from 'svelte/store';
+import { derived, writable } from 'svelte/store';
 
 import type { Readable } from 'svelte/store';
 
@@ -13,12 +13,34 @@ export interface Refreshable<T> extends Readable<RefreshableStore<T>> {
 }
 interface RefreshableStore<T> {
   data: Promise<T> | T;
-  timeRemaining: number;
-  percentCompleted: number;
   startTime: number;
   endTime: number;
+  timeout: number;
   currentState: 'error' | 'success' | 'other';
 }
+
+interface IntervalStore {
+  timeRemaining: number;
+  percentCompleted: number;
+}
+
+export const interval = <T>(
+  refreshStore: Refreshable<T>,
+): Readable<IntervalStore> =>
+  derived(refreshStore, (refreshStore, set) => {
+    set({
+      ...refreshStore,
+      get timeRemaining() {
+        return this.endTime - Date.now();
+      },
+      get percentCompleted() {
+        return Math.floor(
+          ((refreshStore.timeout - this.timeRemaining) / refreshStore.timeout) *
+            100,
+        );
+      },
+    });
+  });
 
 export const refreshable = <T>(
   callback: () => Promise<T>,
@@ -27,20 +49,18 @@ export const refreshable = <T>(
 ): Refreshable<T> => {
   let interval: Timer;
 
-  const heartBeatInterval = 75;
-  let startTime = Date.now();
+  const heartBeatInterval = 2500;
+
+  let isRunning = true;
+  let timeLeftFromPause = 0;
 
   const refresh = () => {
+    console.log('Refresh');
     callback()
       .then((data: T) =>
         store.set({
           data: Promise.resolve(data),
-          get timeRemaining() {
-            return this.endTime - Date.now();
-          },
-          get percentCompleted() {
-            return Math.floor(((timeout - this.timeRemaining) / timeout) * 100);
-          },
+          timeout,
           startTime: Date.now(),
           endTime: Date.now() + timeout,
           currentState: 'success',
@@ -49,12 +69,7 @@ export const refreshable = <T>(
       .catch(() => {
         store.set({
           data: Promise.resolve(null),
-          get timeRemaining() {
-            return this.endTime - Date.now();
-          },
-          get percentCompleted() {
-            return Math.floor(((timeout - this.timeRemaining) / timeout) * 100);
-          },
+          timeout,
           startTime: Date.now(),
           endTime: Date.now() + timeout,
           currentState: 'error',
@@ -63,18 +78,29 @@ export const refreshable = <T>(
   };
 
   const tick = async () => {
-    const timeSinceStart = Date.now() - startTime;
+    let startTime;
+    let endTime;
 
-    if (timeSinceStart >= timeout) {
-      // Hit callback for
-      await refresh();
-      startTime = Date.now();
-    }
     // This is weird but it triggers the store to update so our derived values
     // will show up in UI's
     store.update((store) => {
-      return store;
+      startTime = store.startTime;
+      endTime = store.endTime;
+
+      if (isRunning === false) {
+        startTime = Date.now();
+        endTime = startTime + timeLeftFromPause;
+        timeLeftFromPause = 0;
+        isRunning = true;
+      }
+
+      return { ...store, startTime, endTime };
     });
+
+    if (Date.now() >= endTime) {
+      // Hit callback for
+      await refresh();
+    }
     interval = setTimeout(tick, heartBeatInterval);
   };
 
@@ -85,6 +111,13 @@ export const refreshable = <T>(
   };
 
   const pause = () => {
+    store.update((store) => {
+      timeLeftFromPause = store.endTime - Date.now();
+      console.log('Time remaining in pause', timeLeftFromPause);
+
+      return { ...store };
+    });
+    isRunning = false;
     cleanUp();
   };
 
@@ -98,12 +131,7 @@ export const refreshable = <T>(
   const store = writable<RefreshableStore<T>>(
     {
       data: Promise.resolve(initialData),
-      get timeRemaining() {
-        return this.endTime - Date.now();
-      },
-      get percentCompleted() {
-        return Math.floor(((timeout - this.timeRemaining) / timeout) * 100);
-      },
+      timeout,
       startTime: Date.now(),
       endTime: Date.now() + timeout,
       currentState: 'other',
