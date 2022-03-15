@@ -17,6 +17,10 @@ export const getWorkflowStartedAndCompletedEvents = (
     return !!event.workflowExecutionCompletedEventAttributes;
   });
 
+  const workflowFailedEvent: HistoryEventWithId = events?.find((event) => {
+    return !!event.workflowExecutionFailedEventAttributes;
+  });
+
   if (workflowStartedEvent) {
     input = JSON.stringify(
       workflowStartedEvent?.workflowExecutionStartedEventAttributes?.input
@@ -28,6 +32,12 @@ export const getWorkflowStartedAndCompletedEvents = (
     result = JSON.stringify(
       workflowCompletedEvent?.workflowExecutionCompletedEventAttributes?.result
         ?.payloads,
+    );
+  }
+
+  if (workflowFailedEvent) {
+    result = JSON.stringify(
+      workflowFailedEvent?.workflowExecutionFailedEventAttributes?.failure,
     );
   }
 
