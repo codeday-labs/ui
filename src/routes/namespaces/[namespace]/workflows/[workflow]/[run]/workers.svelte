@@ -46,7 +46,7 @@
           </h3>
         </div>
         <div class="w-3/12 text-left">
-          {#if poller.taskQueueTypes.includes('WORKFLOW')}
+          {#if (poller?.taskQueueTypes ?? []).includes('WORKFLOW')}
             <Icon icon={faCheck} color="blue" />
           {:else}
             <Icon icon={faTimes} color="black" />

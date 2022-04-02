@@ -4,14 +4,15 @@
   export const load: Load = async function ({ url, params, stuff }) {
     const { matchingEvents, matchingEventGroups } = stuff;
 
-    let items: IterableEvents;
+    let items: IterableEvents = [];
 
-    if (params.view === 'summary') items = matchingEvents;
-    if (params.view === 'compact') items = matchingEventGroups;
+    if (params.view === 'summary' && matchingEvents) items = matchingEvents;
+    if (params.view === 'compact' && matchingEventGroups)
+      items = matchingEventGroups;
 
     const [first] = items;
 
-    if (matchingEvents.length && first?.id) {
+    if (matchingEvents && matchingEvents.length && first?.id) {
       url.pathname = `${url.pathname}/${first.id}`;
 
       return {

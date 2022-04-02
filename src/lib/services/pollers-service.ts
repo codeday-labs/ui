@@ -11,6 +11,7 @@ export type GetPollersResponse = {
 
 type PollersData = {
   [key: string]: Poller;
+  [key: undefined | null]: undefined;
 };
 
 type TaskQueueType = 'ACTIVITY' | 'WORKFLOW';

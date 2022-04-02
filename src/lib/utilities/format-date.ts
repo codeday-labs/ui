@@ -8,10 +8,10 @@ type ValidTime = Parameters<typeof parseJSON>[0] | Timestamp;
 const pattern = 'yyyy-MM-dd z HH:mm:ss.SS';
 
 export function formatDate(
-  date: ValidTime,
+  date?: ValidTime | null,
   timeFormat: TimeFormat = 'UTC',
 ): string {
-  if (!date) return '';
+  if (!date || date === undefined || date === null) return '';
 
   try {
     if (isTimestamp(date)) {
@@ -34,16 +34,21 @@ function timestampToDate(ts: Timestamp): Date {
     throw new TypeError('provided value is not a timestamp');
   }
 
-  const d = new Date(null);
+  const d = new Date(0);
 
-  d.setTime(Number(ts.seconds) * 1000 + ts.nanos / 1000);
+  // We check for the existence of nanos in the type guard so non null is fine here
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  d.setTime(Number(ts.seconds) * 1000 + ts.nanos! ?? 0 / 1000);
 
   return d;
 }
 
 function isTimestamp(arg: unknown): arg is Timestamp {
+  // This any is required here to allow us to introspect the object without errors
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const typedArg = arg as any;
   if (typeof arg === 'object') {
-    return arg['seconds'] !== undefined && arg['nanos'] !== undefined;
+    return typedArg['seconds'] !== undefined && typedArg['nanos'] !== undefined;
   }
   return false;
 }

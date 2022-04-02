@@ -17,7 +17,7 @@
   const shouldRedirect = (
     event: HistoryEventWithId,
     eventGroup: CompactEventGroup,
-    { matchingEvents }: Partial<App.Stuff>,
+    matchingEvents: HistoryEventWithId[],
     { view }: Record<string, string>,
   ): boolean => {
     if (!matchingEvents.includes(event)) return true;
@@ -27,9 +27,14 @@
 
   export const load: Load = async function ({ params, stuff, url }) {
     const { eventId } = params;
-    const { events, eventGroups } = stuff;
+    const { events, eventGroups, matchingEvents } = stuff;
 
-    const event: HistoryEventWithId = events.find(
+    if (!events || !matchingEvents) {
+      console.error("Events and matchingEvents weren't loaded for the app");
+      return { status: 404 };
+    }
+
+    const event = events.find(
       (event: HistoryEventWithId) => event.id === eventId,
     );
 
@@ -37,7 +42,7 @@
 
     const eventGroup: CompactEventGroup = getGroupForEvent(event, eventGroups);
 
-    if (shouldRedirect(event, eventGroup, stuff, params)) {
+    if (shouldRedirect(event, eventGroup, matchingEvents, params)) {
       url.pathname = routeForEventHistory(params as EventHistoryParameters);
 
       return {

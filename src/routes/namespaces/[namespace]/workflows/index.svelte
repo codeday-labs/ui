@@ -12,11 +12,11 @@
 
     const { namespace } = params;
 
-    const workflowId = url.searchParams.get('workflow-id');
-    const workflowType = url.searchParams.get('workflow-type');
-    const timeRange = url.searchParams.get('time-range');
+    const workflowId = url.searchParams.get('workflow-id') ?? undefined;
+    const workflowType = url.searchParams.get('workflow-type') ?? undefined;
+    const timeRange = url.searchParams.get('time-range') ?? undefined;
     const executionStatus = url.searchParams.get('status') as WorkflowStatus;
-    const query = url.searchParams.get('query');
+    const query = url.searchParams.get('query') ?? undefined;
 
     const parameters: ValidWorkflowParameters = {
       workflowId,
