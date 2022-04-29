@@ -44,11 +44,13 @@ const getEventResult = (event: CompletionEvent) => {
   return event.attributes;
 };
 
-export const getWorkflowStartedAndCompletedEvents = (
-  events: WorkflowEvents,
-): WorkflowInputAndResults => {
+export const getWorkflowStartedAndCompletedEvents = async (
+  events: Eventual<WorkflowEvents>,
+): Promise<WorkflowInputAndResults> => {
+  events = await events;
+
   let input: string;
-  let result: string;
+  let results: string;
 
   const workflowStartedEvent: WorkflowEvent = events?.find(
     (event: WorkflowEvent) => {
@@ -66,11 +68,11 @@ export const getWorkflowStartedAndCompletedEvents = (
   }
 
   if (workflowCompletedEvent) {
-    result = JSON.stringify(getEventResult(workflowCompletedEvent));
+    results = JSON.stringify(getEventResult(workflowCompletedEvent));
   }
 
   return {
     input,
-    result,
+    result: results,
   };
 };

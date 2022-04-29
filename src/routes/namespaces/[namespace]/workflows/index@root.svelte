@@ -26,13 +26,13 @@
   import { timeFormat } from '$lib/stores/time-format';
   import { getWorkflows } from '$lib/stores/workflows';
 
+  import Loading from '$lib/components/loading.svelte';
   import EmptyState from '$lib/components/empty-state.svelte';
   import Pagination from '$lib/components/pagination.svelte';
   import Badge from '$lib/components/badge.svelte';
   import WorkflowsSummaryTable from './_workflows-summary-table.svelte';
   import WorkflowsSummaryRow from './_workflows-summary-row.svelte';
   import WorkflowFilters from './_workflow-filters.svelte';
-  import WorkflowsLoading from './_workflows-loading.svelte';
 
   export let namespace: string;
   export let searchType: 'basic' | 'advanced';
@@ -49,7 +49,7 @@
 <h2 class="text-2xl">Workflows <Badge type="beta">Beta</Badge></h2>
 <WorkflowFilters bind:searchType bind:query />
 {#await $workflows}
-  <WorkflowsLoading />
+  <Loading />
 {:then { workflows }}
   {#if workflows.length}
     <Pagination items={workflows} let:visibleItems>

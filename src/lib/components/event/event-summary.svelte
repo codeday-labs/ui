@@ -6,7 +6,7 @@
   import EventEmptyRow from './event-empty-row.svelte';
   import { expandAllEvents } from '$lib/stores/event-view-type';
 
-  export let items: IterableEvents;
+  export let items: WorkflowEvents | EventGroups;
   export let groups: EventGroups;
   export let compact = false;
 

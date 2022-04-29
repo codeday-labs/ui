@@ -1,12 +1,16 @@
 <script lang="ts">
   import Icon from 'svelte-fa';
   import { faSpinner } from '@fortawesome/free-solid-svg-icons';
+  import { inputAndResults } from '$lib/stores/events';
 
   import CodeBlock from '$lib/components/code-block.svelte';
+  import Loading from '$lib/components/loading.svelte';
 
   export let title: string;
-  export let content: string;
-  export let isRunning = false;
+  export let type: 'input' | 'results';
+  export let workflow: WorkflowExecution;
+
+  $: inProgress = workflow.isRunning && type === 'results';
 </script>
 
 <article
@@ -14,20 +18,13 @@
   data-cy="workflow-input-and-results"
 >
   <h3 class="text-lg">{title}</h3>
-  {#if isRunning}
-    <div class="my-12 flex flex-col justify-start items-center gap-2">
-      <div
-        class="flex rounded-full items-center justify-center w-16 h-16 bg-gray-200"
-      >
-        <Icon
-          icon={faSpinner}
-          scale={1.2}
-          class="block w-full h-full animate-spin"
-        />
-      </div>
-      <h2 class="text-xl font-medium">In progress…</h2>
-    </div>
+  {#if inProgress}
+    <Loading title="In progress…" />
   {:else}
-    <CodeBlock {content} class="mb-2 max-h-96" />
+    {#await $inputAndResults}
+      <Loading />
+    {:then content}
+      <CodeBlock content={content[type]} class="mb-2 max-h-96" />
+    {/await}
   {/if}
 </article>

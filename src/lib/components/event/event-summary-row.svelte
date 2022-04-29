@@ -16,7 +16,7 @@
   import EventGroupDetails from './event-group-details.svelte';
   import EventDetailsFull from './event-details-full.svelte';
 
-  export let event: IterableEvent;
+  export let event: WorkflowEvent | EventGroup;
   export let groups: EventGroups;
   export let visibleItems: IterableEvent[];
   export let initialItem: IterableEvent;
