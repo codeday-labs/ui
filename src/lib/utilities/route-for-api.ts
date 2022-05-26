@@ -4,6 +4,7 @@ import { namespaceUrlPattern } from './namespace-url-pattern';
 const RealBaseUrl = `https://web.${namespaceUrlPattern.match(window.location.pathname)?.namespace
   }.tmprl.cloud/api/v1/`;
 
+
 let base = (import.meta.env?.VITE_API as string) ?? process.env.VITE_API;
 if (base.endsWith('/')) base = base.slice(0, -1);
 
