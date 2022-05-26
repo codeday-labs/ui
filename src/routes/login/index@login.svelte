@@ -13,11 +13,11 @@
   export const load: Load = async function ({ fetch }) {
     const settings: Settings = await fetchSettings(fetch);
 
-    if (!settings.auth.enabled) {
-      return {
-        status: 404,
-      };
-    }
+    // if (!settings.auth.enabled) {
+    //   return {
+    //     status: 404,
+    //   };
+    // }
 
     return {
       props: { settings },
@@ -31,6 +31,31 @@
   import HamburgerHeader from '$lib/components/hamburger-header.svelte';
 
   export let settings: Settings;
+
+  import { page } from '$app/stores';
+  import { handleAuthError } from '$lib/utilities/handle-auth-error';
+  import { AuthStore } from '$lib/stores/auth';
+  import { onMount } from 'svelte';
+  onMount(async () => {
+    const auth = await $AuthStore;
+    try {
+      const state = await auth.handleRedirectCallback();
+      let redirectUri = new URL('', $page.url.origin);
+      try {
+        if (state.appState.redirectUri) {
+          // See if we can create a url with the current redirect uri if not we error out and it
+          // isn't set
+          // This should prevent all sorts of edge cases like javascript root domains, incorrect origins etc.
+          redirectUri = new URL(state.appState.redirectUri, $page.url.origin);
+        }
+      } catch {}
+      // window.location instead of goto because we want the nav to re-load with the current user token
+      window.location.assign(redirectUri);
+    } catch (e: any) {
+      console.log('Callback', e);
+      handleAuthError(e);
+    }
+  });
 </script>
 
 <NavigationHeader href="/" user={undefined} />

@@ -24,6 +24,7 @@
     "cypress:run": "cypress run"
   },
   "dependencies": {
+    "@auth0/auth0-spa-js": "^1.22.0",
     "@fortawesome/free-solid-svg-icons": "^5.15.4",
     "@sveltejs/svelte-virtual-list": "^3.0.1",
     "date-fns": "^2.23.0",
