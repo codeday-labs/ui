@@ -13,11 +13,11 @@
   export const load: Load = async function ({ fetch }) {
     const settings: Settings = await fetchSettings(fetch);
 
-    // if (!settings.auth.enabled) {
-    //   return {
-    //     status: 404,
-    //   };
-    // }
+    if (!settings.auth.enabled) {
+      return {
+        status: 404,
+      };
+    }
 
     return {
       props: { settings },
@@ -32,7 +32,6 @@
 
   export let settings: Settings;
 
-  import { page } from '$app/stores';
   import { handleAuthError } from '$lib/utilities/handle-auth-error';
   import { AuthStore } from '$lib/stores/auth';
   import { onMount } from 'svelte';
