@@ -22,21 +22,17 @@
 </script>
 
 <article
-  class="flex flex-row xl:gap-4 gap-2 py-2 last:border-b-0 border-b-2 border-gray-200 first:pt-0 {$$props.class}"
+  class="flex flex-row gap-2 border-b-2 border-gray-200 py-2 first:pt-0 last:border-b-0 xl:gap-4 {$$props.class}"
 >
   {#if typeof value === 'object'}
-    <h2 class="w-full items-center xl:items-start xl:w-1/3 text-sm">
+    <h2 class="min-w-fit items-center text-sm xl:items-start">
       {format(key)}
     </h2>
-    <CodeBlock
-      content={getCodeBlockValue(value)}
-      class="w-full w-96 md:w-auto xl:w-2/3"
-      {inline}
-    />
+    <CodeBlock content={getCodeBlockValue(value)} class="w-full" {inline} />
   {:else if shouldDisplayAsWorkflowLink(key)}
-    <div class="flex items-center xl:items-start w-full xl:3/4">
-      <h2 class="w-full xl:w-1/3 text-sm">{format(key)}</h2>
-      <div class="w-full xl:w-2/3 text-sm">
+    <div class="xl:3/4 flex w-full items-center xl:items-start">
+      <h2 class="mr-3 text-sm">{format(key)}</h2>
+      <div class="text-sm">
         <Copyable
           content={value}
           container-class="flex-row-reverse xl:flex-row"
@@ -49,9 +45,9 @@
       </div>
     </div>
   {:else if shouldDisplayAsWorkersLink(key)}
-    <div class="flex items-center xl:items-start w-full xl:3/4">
-      <h2 class="w-full xl:w-1/3 text-sm">{format(key)}</h2>
-      <div class="w-full xl:w-2/3 text-sm">
+    <div class="xl:3/4 flex w-full items-center xl:items-start">
+      <h2 class="mr-3 text-sm">{format(key)}</h2>
+      <div class="text-sm">
         <Copyable
           content={value}
           container-class="flex-row-reverse xl:flex-row"
@@ -64,11 +60,11 @@
       </div>
     </div>
   {:else}
-    <div class="flex items-center xl:items-start w-full xl:3/4">
-      <h2 class="w-full xl:w-1/3 text-sm">{format(key)}</h2>
-      <p class="w-full xl:w-2/3 text-sm text-right xl:text-left">
+    <div class="xl:3/4 flex w-full items-center xl:items-start">
+      <h2 class="mr-3 text-sm">{format(key)}</h2>
+      <p class="text-right text-sm xl:text-left">
         <span
-          class="text-gray-700 px-2 select-all"
+          class="select-all px-2 text-gray-700"
           class:badge={!shouldDisplayAsPlainText(key)}>{value}</span
         >
       </p>
