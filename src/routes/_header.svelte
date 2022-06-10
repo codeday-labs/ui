@@ -17,7 +17,7 @@
   const { showTemporalSystemNamespace } = $page.stuff.settings;
   const { isCloud } = $page.stuff.settings.runtimeEnvironment;
 
-  let namespace =
+  $: namespace =
     $page.params.namespace ?? $page.stuff?.settings?.defaultNamespace;
 
   const namespaces = ($page.stuff.namespaces || [])
@@ -33,9 +33,13 @@
   });
 
   // To show single namespace on cloud
-  if (isCloud && namespace && !namespaceList.length) {
-    const href = routeForWorkflows({ namespace });
-    namespaceList.push({ namespace, href, onClick: () => goto(href) });
+  if (isCloud && $page.params.namespace && !namespaceList.length) {
+    const href = routeForWorkflows({ namespace: $page.params.namespace });
+    namespaceList.push({
+      namespace: $page.params.namespace,
+      href,
+      onClick: () => goto(href),
+    });
   }
 
   $: linkList = {
