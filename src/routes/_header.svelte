@@ -32,7 +32,8 @@
     return { namespace, href, onClick: () => goto(href) };
   });
 
-  if (isCloud) {
+  // To show single namespace on cloud
+  if (isCloud && namespace && !namespaceList.length) {
     const href = routeForWorkflows({ namespace });
     namespaceList.push({ namespace, href, onClick: () => goto(href) });
   }
