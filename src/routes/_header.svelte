@@ -19,8 +19,6 @@
 
   $: namespace =
     $page.params.namespace ?? $page.stuff?.settings?.defaultNamespace;
-  console.log('namespace: ', $page.params.namespace);
-  console.log('default namespace: ', $page.stuff?.settings?.defaultNamespace);
 
   const namespaces = ($page.stuff.namespaces || [])
     .map((namespace: Namespace) => namespace?.namespaceInfo?.name)
@@ -34,7 +32,7 @@
     return { namespace, href, onClick: () => goto(href) };
   });
 
-  if (isCloud && namespace) {
+  if (isCloud) {
     const href = routeForWorkflows({ namespace });
     namespaceList.push({ namespace, href, onClick: () => goto(href) });
     console.log('Namespace List: ', namespaceList);
