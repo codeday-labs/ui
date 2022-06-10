@@ -32,10 +32,12 @@
     return { namespace, href, onClick: () => goto(href) };
   });
 
-  if (isCloud && !namespaceList.length && namespace) {
+  if (isCloud && namespace) {
     const href = routeForWorkflows({ namespace });
     namespaceList.push({ namespace, href, onClick: () => goto(href) });
   }
+
+  console.log('Namespace List: ', namespaceList);
 
   $: linkList = {
     home: routeForWorkflows({ namespace }),
