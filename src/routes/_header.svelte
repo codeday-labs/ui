@@ -18,7 +18,9 @@
   const { isCloud } = $page.stuff.settings.runtimeEnvironment;
 
   $: namespace =
-    $page.params.namespace || $page.stuff?.settings?.defaultNamespace;
+    $page.params.namespace ?? $page.stuff?.settings?.defaultNamespace;
+  console.log('namespace: ', $page.params.namespace);
+  console.log('default namespace: ', $page.stuff?.settings?.defaultNamespace);
 
   const namespaces = ($page.stuff.namespaces || [])
     .map((namespace: Namespace) => namespace?.namespaceInfo?.name)
@@ -33,7 +35,6 @@
   });
 
   console.log('isCloud: ', isCloud);
-  console.log('namespace: ', namespace);
 
   if (isCloud && namespace) {
     const href = routeForWorkflows({ namespace });
