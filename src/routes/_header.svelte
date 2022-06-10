@@ -17,7 +17,7 @@
   const { showTemporalSystemNamespace } = $page.stuff.settings;
   const { isCloud } = $page.stuff.settings.runtimeEnvironment;
 
-  $: namespace =
+  let namespace =
     $page.params.namespace ?? $page.stuff?.settings?.defaultNamespace;
 
   const namespaces = ($page.stuff.namespaces || [])
@@ -35,7 +35,6 @@
   if (isCloud) {
     const href = routeForWorkflows({ namespace });
     namespaceList.push({ namespace, href, onClick: () => goto(href) });
-    console.log('Namespace List: ', namespaceList);
   }
 
   $: linkList = {
