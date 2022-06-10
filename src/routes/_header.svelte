@@ -32,6 +32,11 @@
     return { namespace, href, onClick: () => goto(href) };
   });
 
+  if (isCloud && !namespaceList.length && namespace) {
+    const href = routeForWorkflows({ namespace });
+    namespaceList.push({ namespace, href, onClick: () => goto(href) });
+  }
+
   $: linkList = {
     home: routeForWorkflows({ namespace }),
     archive: routeForArchivalWorkfows({ namespace }),
