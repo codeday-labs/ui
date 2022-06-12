@@ -6,7 +6,9 @@ import { get, writable } from 'svelte/store';
 export const AuthStore = writable<Promise<Auth0Client>>();
 export const AccessToken = writable<string>();
 // eslint-disable-next-line @typescript-eslint/no-empty-function
-export const UserData = writable<Promise<User | undefined | void>>(new Promise(() => { }));
+export const UserData = writable<Promise<User | undefined | void>>(
+  new Promise(() => {}),
+);
 
 try {
   AuthStore.set(
@@ -16,11 +18,14 @@ try {
       audience: 'https://saas-api.tmprl.cloud',
       useRefreshTokens: true,
       cacheLocation: 'localstorage',
-      redirect_uri: new URL('/login/callback', window.location.origin).toString()
+      redirect_uri: new URL(
+        '/login/callback',
+        window.location.origin,
+      ).toString(),
     }).catch((e) => {
       console.log('Error in setting up AuthStore', e);
       handleAuthError(e);
-    }) as Promise<Auth0Client>
+    }) as Promise<Auth0Client>,
   );
 } catch (e) {
   console.error('Error in creating Auth0 Client', e);
@@ -31,7 +36,7 @@ AuthStore.subscribe(async (AuthClient) => {
 
   try {
     const accessToken = await client.getTokenSilently({
-      audience: 'https://saas-api.tmprl.cloud'
+      audience: 'https://saas-api.tmprl.cloud',
     });
 
     AccessToken.set(accessToken);

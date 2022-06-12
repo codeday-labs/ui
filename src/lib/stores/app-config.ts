@@ -16,14 +16,14 @@ interface AppConfig {
 export const app_config: AppConfig = {
   App: {
     baseUrl: import.meta.env.VITE_APP_BASE_URL,
-    ossUrl: import.meta.env.VITE_APP_OSS_URL
+    ossUrl: import.meta.env.VITE_APP_OSS_URL,
   },
   Auth: {
     audience: import.meta.env.VITE_AUTH_AUDIENCE,
     domain: import.meta.env.VITE_AUTH_DOMAIN,
-    clientId: import.meta.env.VITE_AUTH_CLIENT_ID
+    clientId: import.meta.env.VITE_AUTH_CLIENT_ID,
   },
   gRPC: {
-    hostname: import.meta.env.VITE_GRPC_HOSTNAME
-  }
+    hostname: import.meta.env.VITE_GRPC_HOSTNAME,
+  },
 };

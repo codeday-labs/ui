@@ -1,7 +1,9 @@
 import { browser } from '$app/env';
 import { namespaceUrlPattern } from './namespace-url-pattern';
 
-const RealBaseUrl = (pathname) => `https://web.${namespaceUrlPattern.match(pathname)?.namespace
+const RealBaseUrl = (pathname) =>
+  `https://web.${
+    namespaceUrlPattern.match(pathname)?.namespace
   }.tmprl.cloud/api/v1/`;
 
 let base = (import.meta.env?.VITE_API as string) ?? process.env.VITE_API;
