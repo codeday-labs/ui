@@ -21,7 +21,7 @@ export const fetchSettings = async (request = fetch): Promise<Settings> => {
       options: settingsResponse?.Auth?.Options,
     },
     baseUrl:
-      import.meta?.env?.VITE_API ?? browser ? window.location.origin : '',
+      import.meta.env.VITE_API ?? (browser ? window.location.origin : ''),
     codec: {
       endpoint: settingsResponse?.Codec?.Endpoint,
       accessToken: settingsResponse?.Codec?.AccessToken,
